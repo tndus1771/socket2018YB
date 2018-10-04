@@ -42,12 +42,15 @@ main( )
 		//3-3.클라이언트가 접속했을 때 "Client is connected" 출력
 		printf("Client is connected\n");
 		while(1){
+			char * ptrtmp;
+			char * sptr;
+			char string[256];
 			rcvLen = read(c_socket, rcvBuffer, sizeof(rcvBuffer));
 			rcvBuffer[rcvLen] = '\0';
 			printf("[%s] received\n", rcvBuffer);
 			if(strncasecmp(rcvBuffer, "quit", 4) == 0 || strncasecmp(rcvBuffer, "kill server", 11) == 0)
 				break;
-			else if(!strcmp(rcvBuffer, "안녕하세요"))
+			else if(!strcmp(rcvBuffer, "안녕하세요."))
 			{
 				n = strlen("안녕하세요, 만나서 반가워요\n");
 				write(c_socket, "안녕하세요, 만나서 반가워요\n", n);
@@ -64,18 +67,28 @@ main( )
 			}
 			else
 			{
-				char * sptr = strtok(rcvBuffer, " ");
+				sptr = strtok(rcvBuffer, " ");
 				if(!strncasecmp(sptr, "strlen", 6))
 				{
 					sptr = strtok(NULL, " ");
-					sprintf(buffer, "%d\n", strlen(sptr));
+					sprintf(string, "%d\n", strlen(sptr));
+					n = strlen(string);
+					write(c_socket, string, n);
+				}
+				else if(!strncasecmp(sptr, "strcmp", 6))
+				{
+					sptr = strtok(NULL, " ");
+					ptrtmp = strtok(NULL, " ");
+					sprintf(string, "%d\n", strcmp(sptr, ptrtmp));
+					n = strlen(string);
+					write(c_socket, string, n);
+				}
+				else
+				{
 					n = strlen(buffer);
 					write(c_socket, buffer, n);
 				}
-				
 			}
-			n = strlen(buffer);
-			write(c_socket, buffer, n);
 		}
 		close(c_socket);
 		if(!strncasecmp(rcvBuffer, "kill server", 11))
