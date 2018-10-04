@@ -65,6 +65,13 @@ main( )
 			else
 			{
 				char * sptr = strtok(rcvBuffer, " ");
+				if(!strncasecmp(sptr, "strlen", 6))
+				{
+					sptr = strtok(NULL, " ");
+					sprintf(buffer, "%d\n", strlen(sptr));
+					n = strlen(buffer);
+					write(c_socket, buffer, n);
+				}
 				
 			}
 			n = strlen(buffer);
