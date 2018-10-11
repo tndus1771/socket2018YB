@@ -83,6 +83,26 @@ main( )
 					n = strlen(string);
 					write(c_socket, string, n);
 				}
+				else if(!strncasecmp(sptr, "readfile", 8))
+				{
+					FILE * fp;
+					sptr = strtok(NULL, " ");
+					fp = fopen(sptr, "r");
+					if(fp != NULL) {
+						char string2[100];
+						while(fgets(string2, 100, (FILE *)fp))
+						{
+							n = strlen(string2);
+							write(c_socket, string2, n);
+						}
+						fclose(fp);
+					}
+					else
+					{	
+						n = strlen("해당 파일을 여는데 문제가 있습니다.\n");
+						write(c_socket, "해당 파일을 여는데 문제가 있습니다.\n", n);
+					}
+				}
 				else
 				{
 					n = strlen(buffer);
