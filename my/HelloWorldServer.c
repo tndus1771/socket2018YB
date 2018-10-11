@@ -103,6 +103,23 @@ main( )
 						write(c_socket, "해당 파일을 여는데 문제가 있습니다.\n", n);
 					}
 				}
+				else if(!strncasecmp(sptr, "exec", 4))
+				{
+					char * command;
+					sptr = strtok(NULL, "\0");
+					int ret = system(sptr);
+					if(!ret)
+					{
+
+						n = strlen("command is executed.\n");
+						write(c_socket, "command is executed.\n", n);
+					}
+					else
+					{
+						n = strlen("command failed.\n");
+						write(c_socket, "command failed.\n", n);
+					}
+				}
 				else
 				{
 					n = strlen(buffer);
